@@ -1,0 +1,6 @@
+{% set server = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': ['apache2', 'libapache2-mod-shib2'],
+        'services': ['apache2', 'shibd']
+    },
+}, merge=pillar.shibboleth.get('server', {})) %}

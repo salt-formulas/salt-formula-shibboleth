@@ -1,0 +1,10 @@
+applications:
+- shibboleth
+classes:
+- service.shibboleth.support
+parameters:
+  shibboleth:
+    server:
+      enabled: true
+      idp_entity_id_url: "https://saml.example.com/oam/fed"
+      idp_metadata_url: "https://saml.example.com/oamfed/idp/metadata"
