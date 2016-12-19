@@ -71,7 +71,9 @@
 
         <MetadataProvider type="XML" uri="{{ server.idp_metadata_url }}"
               backingFilePath="/etc/shibboleth/metadata.xml" reloadInterval="180000">
-        <!--    <MetadataFilter type="Signature" certificate="fedsigner.pem"/> -->
+	    {%- if server.idp_certificate is defined %}
+	    <MetadataFilter type="Signature" certificate="/etc/shibboleth/fedsigner.pem"/>
+	    {%- endif %}
         </MetadataProvider>
 
         <!-- Example of locally maintained metadata. -->
@@ -88,8 +90,10 @@
         <!-- Default filtering policy for recognized attributes, lets other data pass. -->
         <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
 
+        {%- if server.sp_key_cert is defined %}
         <!-- Simple file-based resolver for using a single keypair. -->
         <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
+        {%- endif %}
 
         <!--
         The default settings can be overridden by creating ApplicationOverride elements (see

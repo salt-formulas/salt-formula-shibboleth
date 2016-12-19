@@ -15,6 +15,38 @@ include:
     - service: apache_service
     - service: shibboleth_service
 
+{%- if server.idp_certificate is defined %}
+/etc/shibboleth/fedsigner.pem:
+  file.managed:
+  - contents_pillar: shibboleth:server:idp_certificate
+  - require:
+    - pkg: apache_packages
+  - watch_in:
+    - service: apache_service
+    - service: shibboleth_service
+{%- endif %}
+
+{%- if server.sp_key_cert is defined %}
+/etc/shibboleth/sp-key.pem:
+  file.managed:
+  - contents_pillar: shibboleth:server:sp_key_cert:key
+  - mode: 600
+  - require:
+    - pkg: apache_packages
+  - watch_in:
+    - service: apache_service
+    - service: shibboleth_service
+
+/etc/shibboleth/sp-cert.pem:
+  file.managed:
+  - contents_pillar: shibboleth:server:sp_key_cert:cert
+  - require:
+    - pkg: apache_packages
+  - watch_in:
+    - service: apache_service
+    - service: shibboleth_service
+{%- endif %}
+
 /etc/shibboleth/attribute-map.xml:
   file.managed:
   - source: salt://shibboleth/files/attribute-map.xml
