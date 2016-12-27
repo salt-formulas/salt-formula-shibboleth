@@ -10,6 +10,6 @@ Vcs-Git: https://github.com/Mirantis/salt-formula-shibboleth.git
 
 Package: salt-formula-shibboleth
 Architecture: all
-Depends: ${misc:Depends}, salt-master, reclass, salt-formula-apache
+Depends: ${misc:Depends}, salt-master, reclass, salt-formula-apache, git
 Description: shibboleth salt formula
  Install and configure Shibboleth for SAML
