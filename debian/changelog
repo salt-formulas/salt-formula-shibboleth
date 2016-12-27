@@ -1,3 +1,9 @@
+salt-formula-shibboleth (0.0.2) trusty; urgency=medium
+
+  * Update debian dependencies for build
+
+ -- Petr Michalec <pmichalec@mirantis.com>  Thu, 27 Oct 2016 13:23:41 +0200
+
 salt-formula-shibboleth (0.0.1) trusty; urgency=medium
 
   * Initial release
