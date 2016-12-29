@@ -21,7 +21,7 @@
     -->
 
     <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
-    <ApplicationDefaults entityID="http://{{ server.public_address }}:5000">
+    <ApplicationDefaults entityID="https://{{ server.public_address }}:5000">
 
         <!--
         Controls session lifetimes, address checks, cookie handling, and the protocol handlers.
