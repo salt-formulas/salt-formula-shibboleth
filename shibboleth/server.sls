@@ -18,7 +18,7 @@ include:
 {%- if server.idp_certificate is defined %}
 /etc/shibboleth/fedsigner.pem:
   file.managed:
-  - contents_pillar: shibboleth:server:idp_certificate
+  - contents: {{ server.idp_certificate | yaml_encode }}
   - require:
     - pkg: apache_packages
   - watch_in:
@@ -26,10 +26,10 @@ include:
     - service: shibboleth_service
 {%- endif %}
 
-{%- if server.sp_key_cert is defined %}
+{%- if server.certificate is defined and server.key is defined %}
 /etc/shibboleth/sp-key.pem:
   file.managed:
-  - contents_pillar: shibboleth:server:sp_key_cert:key
+  - contents: {{ server.key | yaml_encode }}
   - mode: 600
   - require:
     - pkg: apache_packages
@@ -39,7 +39,7 @@ include:
 
 /etc/shibboleth/sp-cert.pem:
   file.managed:
-  - contents_pillar: shibboleth:server:sp_key_cert:cert
+  - contents: {{ server.certificate | yaml_encode }}
   - require:
     - pkg: apache_packages
   - watch_in:

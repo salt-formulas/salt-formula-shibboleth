@@ -1,7 +1,10 @@
 shibboleth:
   server:
     enabled: true
-    idp_entity_id_url: "https://saml.example.com/oam/fed"
+    keystone_protocol: http
+    keystone_public_address: ${_param:proxy_vip_address_public}
+    keystone_port: 5000
+    idp_url: "https://saml.example.com/oam/fed"
     idp_metadata_url: "https://saml.example.com/oamfed/idp/metadata"
     attributes:
     - name: test
