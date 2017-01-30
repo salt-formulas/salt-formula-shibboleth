@@ -70,7 +70,7 @@
             styleSheet="/shibboleth-sp/main.css"/>
 
         <MetadataProvider type="XML" uri="{{ server.idp_metadata_url }}"
-              backingFilePath="/etc/shibboleth/metadata.xml" reloadInterval="180000">
+              backingFilePath="/var/cache/shibboleth/metadata.xml" reloadInterval="180000">
             {%- if server.idp_certificate is defined %}
             <MetadataFilter type="Signature" certificate="/etc/shibboleth/fedsigner.pem"/>
             {%- endif %}
