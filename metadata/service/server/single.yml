@@ -3,6 +3,42 @@ applications:
 classes:
 - service.shibboleth.support
 parameters:
+  _param:
+    shibboleth_server_attributes:
+      - name: sAMAccountName
+        id: sAMAccountName
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: USERNAME
+        id: USERNAME
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: EmailID
+        id: EmailID
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: firstname
+        id: firstname
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: lastname
+        id: lastname
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: USER_LOGIN
+        id: USER_LOGIN
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: USER_NAME_FULL
+        id: USER_NAME_FULL
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: emailAddress
+        id: emailAddress
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: mail
+        id: mail
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: USER_ROLE
+        id: USER_ROLE
+        name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+  apache:
+    server:
+      modules:
+      - shib2
   shibboleth:
     server:
       enabled: true
@@ -11,3 +47,4 @@ parameters:
       keystone_port: 5000
       idp_url: "https://saml.example.com/oam/fed"
       idp_metadata_url: "https://saml.example.com/oamfed/idp/metadata"
+      #attributes: ${_param: shibboleth_server_attributes}
