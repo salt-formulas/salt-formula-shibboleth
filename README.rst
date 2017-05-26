@@ -15,6 +15,7 @@ Sample pillars
       keystone_protocol: http
       keystone_public_address: ${_param:proxy_vip_address_public}
       keystone_port: 5000
+      handler_ssl: false
       idp_url: "https://saml.example.com/oam/fed"
       idp_metadata_url: "https://saml.example.com/oamfed/idp/metadata"
       attributes:
