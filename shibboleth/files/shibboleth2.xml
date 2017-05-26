@@ -69,11 +69,15 @@
             helpLocation="/about.html"
             styleSheet="/shibboleth-sp/main.css"/>
 
+        {%- if server.idp_metadata_file is defined %}
+        <MetadataProvider type="XML" path="/etc/shibboleth/idp_metadata.xml">
+        {%- elif server.idp_metadata_url is defined and server.idp_metadata_file is not defined %}
         <MetadataProvider type="XML" uri="{{ server.idp_metadata_url }}"
-              backingFilePath="/var/cache/shibboleth/metadata.xml" reloadInterval="180000">
-            {%- if server.idp_certificate is defined %}
+              backingFilePath="/var/cache/shibboleth/idp_metadata.xml" reloadInterval="180000">
+        {%- endif %}
+        {%- if server.idp_certificate is defined %}
             <MetadataFilter type="Signature" certificate="/etc/shibboleth/fedsigner.pem"/>
-            {%- endif %}
+        {%- endif %}
         </MetadataProvider>
 
         <!-- Example of locally maintained metadata. -->
