@@ -57,6 +57,17 @@ include:
     - service: apache_service
     - service: shibboleth_service
 
+{%- if server.idp_metadata_file is defined %}
+/etc/shibboleth/idp_metadata.xml:
+  file.managed:
+  - contents: {{ server.idp_metadata_file }}
+  - require:
+    - pkg: apache_packages
+  - watch_in:
+    - service: apache_service
+    - service: shibboleth_service
+{%- endif %}
+
 shibboleth_service:
   service.running:
     - enable: true
