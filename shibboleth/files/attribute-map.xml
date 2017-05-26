@@ -144,7 +144,7 @@
 
     {%- if server.attributes is defined %}
     {%- for attribute in server.attributes %}
-    <Attribute name="{{ attribute.name }}" nameFormat="{{ attribute.name_format }}" id="{{ attribute.id }}"/>
+    <Attribute name="{{ attribute.name }}" {% if attribute.name_format is defined %}nameFormat="{{ attribute.name_format }}"{% endif %} id="{{ attribute.id }}"/>
     {%- if not loop.last %}
     {%- endif %}
     {%- endfor %}
