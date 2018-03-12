@@ -43,3 +43,15 @@ Sample pillars
         aN5DvAdir7oYCpHwD5/WvHahUgsrtcz9s+pzRfiStvICVwqCsGquThZHe8YAgGpZ
         04UU/56ncPbsHf5asS3DvfVGw==
         -----END CERTIFICATE-----
+
+
+Shibboleth through HTTP proxy
+==============
+Sometimes there is needed to connect to IdP through HTTP proxy. This has to be done via adding TransportOption to MetadataProvider in Shibboleth2.xml configuration file.
+
+.. code-block:: yaml
+
+  shibboleth:
+    server:
+      enabled: true
+      proxy: http://10.10.10.12:8888

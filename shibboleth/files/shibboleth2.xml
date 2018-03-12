@@ -74,6 +74,9 @@
             {%- if server.idp_certificate is defined %}
             <MetadataFilter type="Signature" certificate="/etc/shibboleth/fedsigner.pem"/>
             {%- endif %}
+            {%- if server.proxy is defined %}
+            <TransportOption provider="CURL" option="10004">"{{ server.proxy }}"</TransportOption>
+            {%- endif %}
         </MetadataProvider>
 
         <!-- Example of locally maintained metadata. -->
