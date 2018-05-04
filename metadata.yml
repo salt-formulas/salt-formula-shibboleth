@@ -1,6 +1,6 @@
 name: "shibboleth"
 version: "0.0.1"
-source: "https://github.com/Mirantis/salt-formula-shibboleth"
+source: "https://github.com/salt-formulas/salt-formula-shibboleth"
 dependencies:
 - name: apache
-  source: "https://github.com/tcpcloud/salt-formula-apache.git"
+  source: "https://github.com/salt-formulas/salt-formula-apache.git"
