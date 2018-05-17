@@ -12,9 +12,10 @@ Sample pillars
   shibboleth:
     server:
       enabled: true
-      keystone_protocol: http
-      keystone_public_address: ${_param:proxy_vip_address_public}
-      keystone_port: 5000
+      app:
+        entity_id: http://${_param:proxy_vip_address_public}:5000
+        signing: false
+        encryption: false
       idp_url: "https://saml.example.com/oam/fed"
       idp_metadata_url: "https://saml.example.com/oamfed/idp/metadata"
       attributes:
@@ -55,3 +56,135 @@ Sometimes there is needed to connect to IdP through HTTP proxy. This has to be d
     server:
       enabled: true
       proxy: http://10.10.10.12:8888
+
+
+Override IdP metadata from file
+==============
+Sometimes the metadata is not publicly aviailable from IPD. You can define the metadata in pillar. In this case the idp_metadata_url parameter will be ignored.
+
+.. code-block:: yaml
+
+  shibboleth:
+    server:
+      idp_metadata_file: |
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <EntityDescriptor xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+        entityID="idp_url">
+        <IDPSSODescriptor
+        WantAuthnRequestsSigned="false"
+        protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <KeyDescriptor use="signing">
+        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:X509Data>
+        <ds:X509Certificate>MIIEADi........==</ds:X509Certificate>
+        </ds:X509Data>
+        </ds:KeyInfo>
+        </KeyDescriptor>
+        <KeyDescriptor use="signing">
+        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:X509Data>
+        <ds:X509Certificate>MIIEADi........==</ds:X509Certificate>
+        </ds:X509Data>
+        </ds:KeyInfo>
+        </KeyDescriptor>
+        <!-- Supported Name Identifier Formats -->
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+        <!-- AuthenticationRequest Consumer endpoint -->
+        <SingleSignOnService
+        Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        Location="https://IDP_URL/SAMLLogin"
+        />
+        </IDPSSODescriptor>
+        </EntityDescriptor>
+
+
+Shibboleth session control
+==============
+Sometimes there is needed to tune session settings for the application. This has to be done via setting sessions variables Shibboleth2.xml configuration file.
+
+.. code-block:: yaml
+
+  shibboleth:
+    server:
+      sessions:
+        lifetime: 28800
+        timeout: 3600
+        relaystate: "ss:mem"
+        checkaddress: "false"
+        handlerssl: "false"
+        cookieprops: "http"
+
+
+Shibboleth attributeresolver/regex plugins support
+==============
+Sometimes there is needed to set add new attribute by extracting some information from other attributes.  This has to be done loading the plugin and a adding attributeresolver with transform type in Shibboleth2.xml configuration file.
+See more detail here: https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPAttributeResolver#NativeSPAttributeResolver-TransformAttributeResolver(Version2.5andAbove)
+
+.. code-block:: yaml
+
+  shibboleth:
+    server:
+      outofprocess:
+        extensions:
+          library:
+            plugin1:
+               path: plugins.so
+               fatal: "true"
+      attributeresolver:
+        transform:
+          Email:
+            mantch1:
+              match: "@.*$"
+              destination_name: "User-identifier"
+              destination: "$1"
+            mantch2:
+              match: "@.*$"
+              destination: "$2"
+Shibboleth shared session
+==============
+Sometimes there is needed to set shibd on each controller where keystone is running. To make sure sessions are accessible and shared between all of them you need to setup shared storage for sessions
+The example below shows you how to setup shared storage using memcached available on controllers:
+Please note that sessioncache requires memcached with bitmap set to true. Omitting sessioncache element will result in an in-memory plugin identified as id="mem".
+https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPStorageService
+
+.. code-block:: yaml
+
+  shibboleth:
+    server:
+      outofprocess:
+        extensions:
+          library:
+            plugin1:
+              path:  "memcache-store.so"
+              fatal: "true"
+      storageservice:
+        mc:
+          type: MEMCACHE
+          buildmap: "0"
+          sendtimeout: "999999" #optional
+          recvtimeout: "999999" #optional
+          polltimeout: "1000" #optional
+          failtimeout: "5" #optional
+          retrytimeout: "30" #optional
+          prefix: "SHIBD" #optional
+          hosts: "${_param:cluster_node01_address}:11211,${_param:cluster_node02_address}:11211,${_param:cluster_node03_address}:11211
+        mc-ctx:
+          type: MEMCACHE
+          buildmap: "1"
+          sendtimeout: "999999" #optional
+          recvtimeout: "999999" #optional
+          polltimeout: "1000" #optional
+          failtimeout: "5" #optional
+          retrytimeout: "30" #optional
+          prefix: "SHIBD" #optional
+          hosts: "${_param:cluster_node01_address}:11211,${_param:cluster_node02_address}:11211,${_param:cluster_node03_address}:11211
+      sessioncache:
+        type: "StorageService"
+        cachetimeout: "900" #optional
+        storageservice: "mc-ctx"
+        storageservicelite: "mc"
+      replaycache:
+        storageservice: "mc"
+      replaycache:
+        storageservice: "mc"
+        artifactTTL: "180"  #optional

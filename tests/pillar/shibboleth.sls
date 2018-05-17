@@ -1,15 +1,77 @@
 shibboleth:
   server:
     enabled: true
-    keystone_protocol: http
-    keystone_public_address: ${_param:proxy_vip_address_public}
-    keystone_port: 5000
+    app:
+      entity_id: http://${_param:proxy_vip_address_public}:5000
+      signing: false
+      encryption: false
     idp_url: "https://saml.example.com/oam/fed"
     idp_metadata_url: "https://saml.example.com/oamfed/idp/metadata"
     attributes:
     - name: test
       id: test
       name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+    idp_metadata_file: |
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <EntityDescriptor xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+      entityID="idp_url">
+      <IDPSSODescriptor
+      </IDPSSODescriptor>
+      </EntityDescriptor>
+    sessions:
+      lifetime: 28800
+      timeout: 3600
+      relaystate: "ss:mem"
+      checkaddress: "false"
+      handlerssl: "false"
+      cookieprops: "http"
+    outofprocess:
+      extensions:
+        library:
+          plugin1:
+            path:  "memcache-store.so"
+            fatal: "true"
+    storageservice:
+      mc:
+        type: MEMCACHE
+        buildmap: "0"
+        sendtimeout: "999999" #optional
+        recvtimeout: "999999" #optional
+        polltimeout: "1000" #optional
+        failtimeout: "5" #optional
+        retrytimeout: "30" #optional
+        prefix: "SHIBD" #optional
+        hosts: "127.0.0.1:11211"
+      mc-ctx:
+        type: MEMCACHE
+        buildmap: "1"
+        sendtimeout: "999999" #optional
+        recvtimeout: "999999" #optional
+        polltimeout: "1000" #optional
+        failtimeout: "5" #optional
+        retrytimeout: "30" #optional
+        prefix: "SHIBD" #optional
+        hosts: "127.0.0.1:11211"
+    sessioncache:
+      type: "StorageService"
+      cachetimeout: "900" #optional
+      storageservice: "mc-ctx"
+      storageservicelite: "mc"
+    replaycache:
+      storageservice: "mc"
+    replaycache:
+      storageservice: "mc"
+      artifactTTL: "180"  #optional
+    attributeresolver:
+      transform:
+        Email:
+          mantch1:
+            match: "@.*$"
+            destination_name: "User-identifier"
+            destination: "$1"
+          mantch2:
+            match: "@.*$"
+            destination: "$2"
 apache:
   server:
     enabled: true
