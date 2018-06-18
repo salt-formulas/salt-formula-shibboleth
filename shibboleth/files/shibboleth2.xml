@@ -50,7 +50,7 @@
     {%- endif %}
     {%- if server.sessioncache is defined %}
     <SessionCache type="{{ server.sessioncache.get('type', "StorageService") }}" cacheTimeout="{{ server.sessioncache.get('cachetimeout', "900") }}"
-      StorageService="{{ server.sessioncache.get('storageservice', "mem") }}" {%- if server.sessioncache.storageservicelite is defined %}StorageServiceLite="{{ server.sessioncache.get('storageservicelite', "mem") }}"{%- endif %} />
+      StorageService="{{ server.sessioncache.get('storageservice', "mem") }}" {% if server.sessioncache.storageservicelite is defined %}StorageServiceLite="{{ server.sessioncache.get('storageservicelite', "mem") }}"{%- endif %} />
     {%- endif %}
     {%- if server.replaycache is defined %}
     <ReplayCache StorageService="{{ server.replaycache.get('storageservice', "mem") }}"/>
