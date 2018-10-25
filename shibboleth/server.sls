@@ -15,6 +15,16 @@ include:
     - service: apache_service
     - service: shibboleth_service
 
+/etc/shibboleth/shibd.logger:
+  file.managed:
+  - source: salt://shibboleth/files/shibd.logger
+  - template: jinja
+  - require:
+    - pkg: apache_packages
+  - watch_in:
+    - service: apache_service
+    - service: shibboleth_service
+
 {%- if server.idp_metadata_file is defined %}
 /etc/shibboleth/idp-metadata.xml:
   file.managed:

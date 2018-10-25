@@ -20,7 +20,7 @@
     file, and the https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPRequestMapHowTo topic.
     -->
     {%- if server.outofprocess is defined %}
-    <OutOfProcess>
+    <OutOfProcess  {% if server.outofprocess.tranlogformat is defined %}tranLogFormat="{{ server.outofprocess.tranlogformat }}"{% endif %}>
     {%- if server.outofprocess.extensions is defined %}
       <Extensions>
     {%- if server.outofprocess.extensions.library is defined %}

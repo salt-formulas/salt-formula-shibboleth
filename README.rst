@@ -14,14 +14,16 @@ Sample pillars
       enabled: true
       app:
         entity_id: http://${_param:proxy_vip_address_public}:5000
-        signing: false
-        encryption: false
+        signing: "false"
+        encryption: "false"
       idp_url: "https://saml.example.com/oam/fed"
       idp_metadata_url: "https://saml.example.com/oamfed/idp/metadata"
       attributes:
       - name: test
         id: test
         name_format: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+      - name: test1
+        id: test1
       key: |
         -----BEGIN PRIVATE KEY-----
         MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDmM1NIxgQ3Y70Q
@@ -56,6 +58,20 @@ Sometimes there is needed to connect to IdP through HTTP proxy. This has to be d
     server:
       enabled: true
       proxy: http://10.10.10.12:8888
+
+
+Shibboleth with Transaction logging
+==============
+
+.. code-block:: yaml
+
+  shibboleth:
+    server:
+      enabled: true
+      logging:
+        message_decoder: DEBUG
+      outofprocess:
+        tran_log_format: "%u|%a|%s|%SP|%IDP|%t|%b|%ac|%attr|%E|%e|%S|%SS|%SM|%URI|%URL|%UA|%app|%p|%n|%D|%d|%I|%II"
 
 
 Override IdP metadata from file
