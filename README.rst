@@ -71,7 +71,7 @@ Shibboleth with Transaction logging
       logging:
         message_decoder: DEBUG
       outofprocess:
-        tran_log_format: "%u|%a|%s|%SP|%IDP|%t|%b|%ac|%attr|%E|%e|%S|%SS|%SM|%URI|%URL|%UA|%app|%p|%n|%D|%d|%I|%II"
+        tranlogformat: "%u|%a|%s|%SP|%IDP|%t|%b|%ac|%attr|%E|%e|%S|%SS|%SM|%URI|%URL|%UA|%app|%p|%n|%D|%d|%I|%II"
 
 
 Override IdP metadata from file

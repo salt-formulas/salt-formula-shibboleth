@@ -30,7 +30,7 @@ shibboleth:
       handlerssl: "false"
       cookieprops: "http"
     outofprocess:
-      tran_log_format: "%u|%a|%s|%SP|%IDP|%t|%b|%ac|%attr|%E|%e|%S|%SS|%SM|%URI|%URL|%UA|%app|%p|%n|%D|%d|%I|%II"
+      tranlogformat: "%u|%a|%s|%SP|%IDP|%t|%b|%ac|%attr|%E|%e|%S|%SS|%SM|%URI|%URL|%UA|%app|%p|%n|%D|%d|%I|%II"
       extensions:
         library:
           plugin1:
